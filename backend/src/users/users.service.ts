@@ -51,4 +51,20 @@ export class UserService{
         return data
     }
 
+    async addToWaitlist(email: string){
+        const {data, error} = await this.supabaseClient
+            .from('waitlist')
+            .insert({
+                email: email
+            })
+            .select()
+            .single()
+        
+        if(error){
+            throw error;
+        }
+
+        return data
+    }
+
 }

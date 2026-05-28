@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.service';
 import { UserModule } from './users/users.module';
 import { NotificationsModule } from './apn/notifications.module';
 import { DeviceTokenController } from './apn/device-token.controller';
+import { GroupModule } from './groups/groups.module';
 
 
 @Module({
@@ -15,7 +16,8 @@ import { DeviceTokenController } from './apn/device-token.controller';
         SupabaseModule,
         AuthModule,
         UserModule,
-        NotificationsModule
+        NotificationsModule,
+        GroupModule
     ],
     controllers: [AppController,DeviceTokenController],
     providers: [AppService],
