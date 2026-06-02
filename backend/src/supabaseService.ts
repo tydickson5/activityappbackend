@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { createClient } from "@supabase/supabase-js";
-import WebSocket from 'ws';
+import ws from 'ws';
 
-// supabase.service.ts
 @Injectable()
 export class SupabaseService {
   readonly client = createClient(
@@ -10,7 +9,7 @@ export class SupabaseService {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       realtime: {
-        transport: WebSocket as any,
+        transport: ws as any,
       },
     }
   );
