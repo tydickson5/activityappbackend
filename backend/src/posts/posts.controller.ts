@@ -1,0 +1,36 @@
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { JWTStrategy } from "dist/auth/jwt.strategy";
+import { PostService } from "./posts.service";
+
+@Controller('posts')
+@UseGuards(JWTStrategy)
+export class PostController {
+    constructor(private postsService: PostService){}
+
+    @Post('create')
+    async create(
+        @Body()
+        body: {
+            postId: string,
+            userId: string,
+            groupId: string,
+            caption: string,
+            mediaUrl: string,
+            mediaType: string,
+            latitude,
+            longitude,
+        }
+    ){
+        return this.postsService.createPost(body.postId,body.userId, body.groupId,body.caption,body.mediaUrl,body.mediaType,body.latitude,body.longitude)
+    }
+
+    @Post('delete')
+    async join(
+        @Body()
+        body: {
+            post_id: string
+        }
+    ){
+        return this.postsService.deletePost(body.post_id)
+    }
+}

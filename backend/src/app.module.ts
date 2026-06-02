@@ -8,6 +8,7 @@ import { UserModule } from './users/users.module';
 import { NotificationsModule } from './apn/notifications.module';
 import { DeviceTokenController } from './apn/device-token.controller';
 import { GroupModule } from './groups/groups.module';
+import { PostModule } from './posts/posts.module';
 
 
 @Module({
@@ -17,7 +18,8 @@ import { GroupModule } from './groups/groups.module';
         AuthModule,
         UserModule,
         NotificationsModule,
-        GroupModule
+        GroupModule,
+        PostModule
     ],
     controllers: [AppController,DeviceTokenController],
     providers: [AppService],

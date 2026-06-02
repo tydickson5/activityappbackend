@@ -17,6 +17,7 @@ const users_module_1 = require("./users/users.module");
 const notifications_module_1 = require("./apn/notifications.module");
 const device_token_controller_1 = require("./apn/device-token.controller");
 const groups_module_1 = require("./groups/groups.module");
+const posts_module_1 = require("./posts/posts.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,7 +29,8 @@ exports.AppModule = AppModule = __decorate([
             auth_service_1.AuthModule,
             users_module_1.UserModule,
             notifications_module_1.NotificationsModule,
-            groups_module_1.GroupModule
+            groups_module_1.GroupModule,
+            posts_module_1.PostModule
         ],
         controllers: [app_controller_1.AppController, device_token_controller_1.DeviceTokenController],
         providers: [app_service_1.AppService],
