@@ -1,17 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { throwError } from "rxjs";
+import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
 export class UserService{
-    private supabaseClient = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+
+    constructor(
+    private readonly supabase: SupabaseService,
+    ) {}
+
 
     async getProfile(userId: String){
-        const {data, error} = await this.supabaseClient
-            .from('profiles')
+        const {data, error} = await 
+            this.supabase.client.from('profiles')
             .select('*')
             .eq('id', userId)
             .single()
@@ -24,7 +26,7 @@ export class UserService{
 
     async onboardUser(userId: string, email: string){
         //check for existing user
-        const {data: existingProfile} = await this.supabaseClient
+        const {data: existingProfile} = await this.supabase.client
             .from('profiles')
             .select('*')
             .eq('id', userId)
@@ -35,7 +37,7 @@ export class UserService{
         }
 
         //create new user
-        const {data, error} = await this.supabaseClient
+        const {data, error} = await this.supabase.client
             .from('profiles')
             .insert({
                 id: userId,
@@ -52,7 +54,7 @@ export class UserService{
     }
 
     async addToWaitlist(email: string){
-        const {data, error} = await this.supabaseClient
+        const {data, error} = await this.supabase.client
             .from('waitlist')
             .insert({
                 email: email

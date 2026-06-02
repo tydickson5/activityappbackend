@@ -1,20 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { ApnsService } from "./apns.service";
 import { createClient } from "@supabase/supabase-js";
+import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
 export class NotificationService {
 
-    private supabaseClient = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    constructor(private readonly apnsService: ApnsService){
+    constructor(
+            private readonly supabase: SupabaseService,
+            private readonly apnsService: ApnsService
+        ) {}
 
-    }
 
     async createNotification(userId: string, title: string, body: string,){
-        const {data: notification} = await this.supabaseClient
+        const {data: notification} = await this.supabase.client
             .from('notifications')
             .insert({
                 user_id: userId,
@@ -24,7 +23,7 @@ export class NotificationService {
             .select()
             .single()
 
-        const {data: tokens} = await this.supabaseClient
+        const {data: tokens} = await this.supabase.client
             .from('device_tokens')
             .select('*')
             .eq('user_id', userId)
@@ -46,7 +45,7 @@ export class NotificationService {
     }
 
     async updateNotification(notificationId: string, title: string, body: string){
-        const {data: existing} = await this.supabaseClient
+        const {data: existing} = await this.supabase.client
             .from('notifications')
             .select('*')
             .eq('id', notificationId)
@@ -54,7 +53,7 @@ export class NotificationService {
 
         const version = existing.version + 1
 
-        const {data: updated} = await this.supabaseClient
+        const {data: updated} = await this.supabase.client
             .from('notifications')
             .update({
                 title,
@@ -65,7 +64,7 @@ export class NotificationService {
             .select()
             .single()
 
-        const {data: tokens } = await this.supabaseClient
+        const {data: tokens } = await this.supabase.client
             .from('device_tokens')
             .select('*')
             .eq('user_id', existing.user_id)
@@ -87,13 +86,13 @@ export class NotificationService {
     }
 
     async deleteNotification(notificationId: string){
-        const {data:existing} = await this.supabaseClient
+        const {data:existing} = await this.supabase.client
             .from('notifications')
             .select('*')
             .eq('id', notificationId)
             .single()
 
-        const{data:tokens} = await this.supabaseClient
+        const{data:tokens} = await this.supabase.client
             .from('device_tokens')
             .select('*')
             .eq('user_id', existing.user_id)
@@ -102,7 +101,7 @@ export class NotificationService {
             await this.apnsService.sendSilentDelete(token.device_token, notificationId)
         }
 
-        await this.supabaseClient
+        await this.supabase.client
             .from('notifications')
             .delete()
             .eq('id', notificationId)

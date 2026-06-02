@@ -1,12 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
+import { SupabaseService } from 'src/supabaseService';
 
 @Controller()
 export class DeviceTokenController {
-    private supabaseClient = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    constructor(
+            private readonly supabase: SupabaseService,
+        ) {}
 
     @Post('device-token')
     async register(
@@ -19,7 +19,7 @@ export class DeviceTokenController {
 
         console.log('REGISTER TOKEN BODY:', body);
 
-        const result = await this.supabaseClient
+        const result = await this.supabase.client
         .from('device_tokens')
         .upsert({
             user_id: body.userId,

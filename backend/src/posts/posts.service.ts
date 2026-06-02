@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { createClient } from "@supabase/supabase-js";
+import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
 export class PostService{
-    private supabaseClient = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    constructor(
+        private readonly supabase: SupabaseService,
+    ) {}
 
     async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, latitude, longitude){
         
-        const{data, error} = await this.supabaseClient
+        const{data, error} = await this.supabase.client
             .from('posts')
             .insert({
                 id: postId,
@@ -38,7 +38,7 @@ export class PostService{
 
     async deletePost(postId: string){
 
-        const {error} = await this.supabaseClient
+        const {error} = await this.supabase.client
             .from('posts')
             .delete()
             .eq('id', postId)
@@ -50,7 +50,7 @@ export class PostService{
 
     async createUpload(userId: string, postId: string, filePath: string, mediaType: string){
 
-        const {data, error} = await this.supabaseClient
+        const {data, error} = await this.supabase.client
             .from('uploads')
             .insert({
                 post_id: postId,

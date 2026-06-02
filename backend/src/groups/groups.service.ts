@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { createClient } from "@supabase/supabase-js";
+import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
 export class GroupService{
-    private supabaseClient = createClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    constructor(
+        private readonly supabase: SupabaseService,
+    ) {}
 
     async createGroup(userId: string, name: String){
-        const {data, error} = await this.supabaseClient
+        const {data, error} = await this.supabase.client
             .from('groups')
             .insert({
                 user_id: userId,
@@ -35,7 +35,7 @@ export class GroupService{
             success: false
         }
 
-        const {data: existingMember} = await this.supabaseClient
+        const {data: existingMember} = await this.supabase.client
             .from('group_memberships')
             .select('*')
             .eq('user_id', userId)
@@ -47,7 +47,7 @@ export class GroupService{
         }
 
         //join group
-        const {data, error} = await this.supabaseClient
+        const {data, error} = await this.supabase.client
             .from('group_memberships')
             .insert({
                 user_id: userId,
@@ -64,7 +64,7 @@ export class GroupService{
     }
 
     async groupExists(groupId: string){
-        const {data: existingGroup} = await this.supabaseClient
+        const {data: existingGroup} = await this.supabase.client
             .from('groups')
             .select('*')
             .eq('group_id', groupId)

@@ -9,6 +9,7 @@ import { NotificationsModule } from './apn/notifications.module';
 import { DeviceTokenController } from './apn/device-token.controller';
 import { GroupModule } from './groups/groups.module';
 import { PostModule } from './posts/posts.module';
+import { SupabaseService } from './supabaseService';
 
 
 @Module({
@@ -21,7 +22,7 @@ import { PostModule } from './posts/posts.module';
         GroupModule,
         PostModule
     ],
-    controllers: [AppController,DeviceTokenController],
-    providers: [AppService],
+    controllers: [AppController,DeviceTokenController, SupabaseService],
+    providers: [AppService, SupabaseService],
 })
 export class AppModule {}
