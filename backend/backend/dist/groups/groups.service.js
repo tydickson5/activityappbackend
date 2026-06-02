@@ -5,14 +5,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GroupService = void 0;
 const common_1 = require("@nestjs/common");
-const supabase_js_1 = require("@supabase/supabase-js");
+const supabaseService_1 = require("../supabaseService");
 let GroupService = class GroupService {
-    supabaseClient = (0, supabase_js_1.createClient)(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    supabase;
+    constructor(supabase) {
+        this.supabase = supabase;
+    }
     async createGroup(userId, name) {
-        const { data, error } = await this.supabaseClient
+        const { data, error } = await this.supabase.client
             .from('groups')
             .insert({
             user_id: userId,
@@ -31,7 +37,7 @@ let GroupService = class GroupService {
         if (!this.groupExists(groupId)) {
             success: false;
         }
-        const { data: existingMember } = await this.supabaseClient
+        const { data: existingMember } = await this.supabase.client
             .from('group_memberships')
             .select('*')
             .eq('user_id', userId)
@@ -40,7 +46,7 @@ let GroupService = class GroupService {
         if (existingMember) {
             return existingMember;
         }
-        const { data, error } = await this.supabaseClient
+        const { data, error } = await this.supabase.client
             .from('group_memberships')
             .insert({
             user_id: userId,
@@ -54,7 +60,7 @@ let GroupService = class GroupService {
         return data;
     }
     async groupExists(groupId) {
-        const { data: existingGroup } = await this.supabaseClient
+        const { data: existingGroup } = await this.supabase.client
             .from('groups')
             .select('*')
             .eq('group_id', groupId)
@@ -67,6 +73,7 @@ let GroupService = class GroupService {
 };
 exports.GroupService = GroupService;
 exports.GroupService = GroupService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [supabaseService_1.SupabaseService])
 ], GroupService);
 //# sourceMappingURL=groups.service.js.map

@@ -11,13 +11,14 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const config_1 = require("@nestjs/config");
-const supabase_module_1 = require("./supabase/supabase.module");
 const auth_service_1 = require("./auth/auth.service");
 const users_module_1 = require("./users/users.module");
 const notifications_module_1 = require("./apn/notifications.module");
 const device_token_controller_1 = require("./apn/device-token.controller");
 const groups_module_1 = require("./groups/groups.module");
 const posts_module_1 = require("./posts/posts.module");
+const supabaseService_1 = require("./supabaseService");
+const supabaseModule_1 = require("./supabaseModule");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -25,7 +26,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            supabase_module_1.SupabaseModule,
+            supabaseModule_1.SupabaseModule,
             auth_service_1.AuthModule,
             users_module_1.UserModule,
             notifications_module_1.NotificationsModule,
@@ -33,7 +34,7 @@ exports.AppModule = AppModule = __decorate([
             posts_module_1.PostModule
         ],
         controllers: [app_controller_1.AppController, device_token_controller_1.DeviceTokenController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, supabaseService_1.SupabaseService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

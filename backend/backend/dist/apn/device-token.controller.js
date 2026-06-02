@@ -14,12 +14,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviceTokenController = void 0;
 const common_1 = require("@nestjs/common");
-const supabase_js_1 = require("@supabase/supabase-js");
+const supabaseService_1 = require("../supabaseService");
 let DeviceTokenController = class DeviceTokenController {
-    supabaseClient = (0, supabase_js_1.createClient)(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    supabase;
+    constructor(supabase) {
+        this.supabase = supabase;
+    }
     async register(body) {
         console.log('REGISTER TOKEN BODY:', body);
-        const result = await this.supabaseClient
+        const result = await this.supabase.client
             .from('device_tokens')
             .upsert({
             user_id: body.userId,
@@ -38,6 +41,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DeviceTokenController.prototype, "register", null);
 exports.DeviceTokenController = DeviceTokenController = __decorate([
-    (0, common_1.Controller)()
+    (0, common_1.Controller)(),
+    __metadata("design:paramtypes", [supabaseService_1.SupabaseService])
 ], DeviceTokenController);
 //# sourceMappingURL=device-token.controller.js.map

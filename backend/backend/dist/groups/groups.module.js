@@ -10,11 +10,13 @@ exports.GroupModule = void 0;
 const common_1 = require("@nestjs/common");
 const groups_controller_1 = require("./groups.controller");
 const groups_service_1 = require("./groups.service");
+const supabaseModule_1 = require("../supabaseModule");
 let GroupModule = class GroupModule {
 };
 exports.GroupModule = GroupModule;
 exports.GroupModule = GroupModule = __decorate([
     (0, common_1.Module)({
+        imports: [supabaseModule_1.SupabaseModule],
         controllers: [
             groups_controller_1.GroupController
         ],

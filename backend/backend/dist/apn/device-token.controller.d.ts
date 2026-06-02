@@ -1,5 +1,7 @@
+import { SupabaseService } from "../supabaseService";
 export declare class DeviceTokenController {
-    private supabaseClient;
+    private readonly supabase;
+    constructor(supabase: SupabaseService);
     register(body: {
         userId: string;
         deviceToken: string;

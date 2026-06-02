@@ -11,11 +11,13 @@ const common_1 = require("@nestjs/common");
 const notification_controller_1 = require("./notification.controller");
 const notification_service_1 = require("./notification.service");
 const apns_service_1 = require("./apns.service");
+const supabaseModule_1 = require("../supabaseModule");
 let NotificationsModule = class NotificationsModule {
 };
 exports.NotificationsModule = NotificationsModule;
 exports.NotificationsModule = NotificationsModule = __decorate([
     (0, common_1.Module)({
+        imports: [supabaseModule_1.SupabaseModule],
         controllers: [notification_controller_1.NotificationController],
         providers: [
             notification_service_1.NotificationService,
