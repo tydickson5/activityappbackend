@@ -1,6 +1,6 @@
 app = "activityapp-backend"
 primary_region = "iad"
-min_machines_running = 0
+
 
 [build]
   dockerfile = "Dockerfile"
