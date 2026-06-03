@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { JWTStrategy } from "dist/auth/jwt.strategy";
 import { PostService } from "./posts.service";
+import { JWTStrategy } from "src/auth/jwt.strategy";
 
 @Controller('posts')
 @UseGuards(JWTStrategy)

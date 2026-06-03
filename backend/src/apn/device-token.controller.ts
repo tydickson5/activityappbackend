@@ -1,5 +1,4 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { createClient } from '@supabase/supabase-js';
 import { SupabaseService } from 'src/supabaseService';
 
 @Controller()

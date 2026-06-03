@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GroupController = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_auth_gaurd_1 = require("../../dist/auth/jwt-auth.gaurd");
 const groups_service_1 = require("./groups.service");
+const jwt_auth_gaurd_1 = require("../auth/jwt-auth.gaurd");
 let GroupController = class GroupController {
     groupsService;
     constructor(groupsService) {

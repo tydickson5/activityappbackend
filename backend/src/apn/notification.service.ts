@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { ApnsService } from "./apns.service";
-import { createClient } from "@supabase/supabase-js";
 import { SupabaseService } from "src/supabaseService";
 
 @Injectable()

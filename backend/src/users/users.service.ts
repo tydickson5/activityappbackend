@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { throwError } from "rxjs";
 import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
