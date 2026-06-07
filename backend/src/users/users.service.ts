@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { GroupService } from "src/groups/groups.service";
 import { SupabaseService } from "src/supabaseService";
 
 @Injectable()
@@ -6,6 +7,7 @@ export class UserService{
 
     constructor(
     private readonly supabase: SupabaseService,
+    private readonly groupService: GroupService,
     ) {}
 
 
@@ -47,6 +49,10 @@ export class UserService{
         if(error) {
             throw error;
         }
+
+        //join main group
+        this.groupService.joinGroup(userId, "76ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
+
 
         return data
     }

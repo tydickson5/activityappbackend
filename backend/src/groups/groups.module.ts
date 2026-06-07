@@ -10,7 +10,8 @@ import { SupabaseModule } from "src/supabaseModule";
     ],
     providers: [
         GroupService
-    ]
+    ],
+    exports: [GroupService]
 })
 
 export class GroupModule{}
