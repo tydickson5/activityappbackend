@@ -51,11 +51,26 @@ export class UserService{
         }
 
         //join main group
-        var response = this.groupService.joinGroup(userId, "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
+        var response = this.joinPublicGroup(userId, "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
 
         console.log(response)
 
         return data
+    }
+
+    async joinPublicGroup(userId: string, groupId: string){
+        const {data, error} = await this.supabase.client
+            .from('group_memberships')
+            .insert({
+                user_id: userId,
+                group_id: groupId
+            })
+            .select()
+            .single()
+
+        if(error){
+            throw error
+        }
     }
 
     async addToWaitlist(email: string){
