@@ -51,8 +51,9 @@ export class UserService{
         }
 
         //join main group
-        this.groupService.joinGroup(userId, "76ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
+        var response = this.groupService.joinGroup(userId, "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
 
+        console.log(response)
 
         return data
     }
