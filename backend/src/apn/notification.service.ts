@@ -12,7 +12,8 @@ export class NotificationService {
 
 
     async createNotification(userId: string, title: string, body: string,){
-        const {data: notification} = await this.supabase.client
+        console.log("createNotification called", userId)
+        const {data: notification, error} = await this.supabase.client
             .from('notifications')
             .insert({
                 user_id: userId,
@@ -21,6 +22,11 @@ export class NotificationService {
             })
             .select()
             .single()
+
+        if (error) {
+            console.log("NOTIFICATION INSERT ERROR:", error)
+            throw error
+        }
 
         const {data: tokens} = await this.supabase.client
             .from('device_tokens')

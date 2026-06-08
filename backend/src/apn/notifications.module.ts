@@ -10,6 +10,7 @@ import { SupabaseModule } from "src/supabaseModule";
     providers: [
         NotificationService,
         ApnsService
-    ]
+    ],
+    exports: [NotificationService]
 })
 export class NotificationsModule {}
