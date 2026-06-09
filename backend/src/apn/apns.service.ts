@@ -3,18 +3,10 @@ import apn from '@parse/node-apn'
 
 @Injectable()
 export class ApnsService {
-    private sandboxProvider: apn.Provider
     private productionProvider: apn.Provider
 
     constructor() {
-        this.sandboxProvider = new apn.Provider({
-            token: {
-                key: process.env.APPLE_APNS_KEY_PATH!,
-                keyId: process.env.APPLE_KEY_ID!,
-                teamId: process.env.APPLE_TEAM_ID!,
-            },
-            production: false, 
-        })
+
 
         this.productionProvider = new apn.Provider({
             token: {
@@ -41,18 +33,12 @@ export class ApnsService {
 
         console.log("Sending via PRODUCTION")
 
-        let result = await this.productionProvider.send(note, deviceToken)
+        const result = await this.productionProvider.send(note, deviceToken);
 
-        console.log("PRODUCTION RESULT:", JSON.stringify(result, null, 2))
+        console.log("APNS RESULT:", JSON.stringify(result, null, 2));
 
-        if (result.failed?.length) {
-            console.log("Retrying via SANDBOX")
-
-            const sandboxResult = await this.sandboxProvider.send(note, deviceToken)
-
-            console.log("SANDBOX RESULT:", JSON.stringify(sandboxResult, null, 2))
-
-            return sandboxResult
+        if (result.failed.length) {
+            console.error("APNS FAILED:", result.failed);
         }
 
         return result
@@ -72,20 +58,13 @@ export class ApnsService {
             notificationId,
         };
 
-        const result = await this.productionProvider.send(note, deviceToken)
+        const result = await this.productionProvider.send(note, deviceToken);
+
+        console.log("APNS RESULT:", JSON.stringify(result, null, 2));
 
         if (result.failed.length) {
-            const reason = result.failed[0]?.response?.reason
-
-            if (reason === "BadEnvironmentKeyInToken") {
-            return this.sandboxProvider.send(note, deviceToken)
-            }
+            console.error("APNS FAILED:", result.failed);
         }
-
-        console.log(
-            "APNS RESULT",
-            JSON.stringify(result, null, 2)
-        );
 
         return result;
     }
