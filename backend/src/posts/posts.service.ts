@@ -31,10 +31,8 @@ export class PostService{
             throw error
         }
 
-        //createupload
-        await this.createUpload(userId, data.id, mediaUrl, mediaType)
-        console.log("post uploaded")
-        await this.sendNotificaitonToUsers(groupId, userId)
+
+        await this.sendNotificaitonToUsers(groupId, userId,latitude,longitude)
         console.log("post notified")
 
         return data
@@ -77,8 +75,8 @@ export class PostService{
         return null;
     }
 
-    async sendNotificaitonToUsers(groupId: string, userId: string){
-
+    async sendNotificaitonToUsers(groupId: string, userId: string, latitude, longitude){
+        console.log("test")
         const {data, error} = await this.supabase.client
             .from('group_memberships')
             .select("*")
@@ -93,14 +91,15 @@ export class PostService{
             .eq('id', userId)
             .single()
 
-        var text = m.username + " posted"
+        var title = m.username + " posted"
+        var text = "@ " + longitude + ", " + latitude
 
         for(let member of data){
             if(member.user_id != userId){
 
                 
 
-                await this.notificationService.createNotification(member.user_id, "New Post", text)
+                await this.notificationService.createNotification(member.user_id,title, text)
             }
         }
     }
