@@ -11,9 +11,10 @@ export class NotificationService {
         ) {}
 
 
-    async createNotification(userId: string, title: string, body: string,){
-        console.log("createNotification called", userId)
-        const {data: notification, error} = await this.supabase.client
+    async createNotification(userId: string, title: string, body: string) {
+        console.log("STEP 1: entered function", userId)
+
+        const { data: notification, error } = await this.supabase.client
             .from('notifications')
             .insert({
                 user_id: userId,
@@ -23,17 +24,25 @@ export class NotificationService {
             .select()
             .single()
 
+        console.log("STEP 2: after insert")
+
         if (error) {
-            console.log("NOTIFICATION INSERT ERROR:", error)
+            console.log("INSERT ERROR:", error)
             throw error
         }
 
-        const {data: tokens} = await this.supabase.client
+        console.log("STEP 3: notification created", notification)
+
+        const { data: tokens, error: tokenError } = await this.supabase.client
             .from('device_tokens')
             .select('*')
             .eq('user_id', userId)
 
-        for (const token of tokens || []){
+        console.log("STEP 4: tokens fetched", tokens, tokenError)
+
+        for (const token of tokens || []) {
+            console.log("STEP 5: sending to", token.device_token)
+
             await this.apnsService.sendNotification(
                 token.device_token,
                 {
@@ -45,6 +54,8 @@ export class NotificationService {
                 }
             )
         }
+
+        console.log("STEP 6: done")
 
         return notification
     }
