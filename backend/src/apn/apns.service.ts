@@ -3,21 +3,31 @@ import apn from '@parse/node-apn'
 
 @Injectable()
 export class ApnsService {
-    private provider: apn.Provider
+    private sandboxProvider: apn.Provider
+    private productionProvider: apn.Provider
 
     constructor() {
-        this.provider = new apn.Provider({
+        this.sandboxProvider = new apn.Provider({
             token: {
                 key: process.env.APPLE_APNS_KEY_PATH!,
                 keyId: process.env.APPLE_KEY_ID!,
                 teamId: process.env.APPLE_TEAM_ID!,
             },
-            production: true, //change when building
+            production: false, 
+        })
+
+        this.productionProvider = new apn.Provider({
+            token: {
+                key: process.env.APPLE_APNS_KEY_PATH!,
+                keyId: process.env.APPLE_KEY_ID!,
+                teamId: process.env.APPLE_TEAM_ID!,
+            },
+            production: true, 
         })
     }
 
     async sendNotification(
-        devideToken: string,
+        deviceToken: string,
         payload: {
             notificationId: string;
             title?: string;
@@ -49,7 +59,15 @@ export class ApnsService {
             version: payload.version || 1,
         }
 
-        const result = await this.provider.send(note, devideToken);
+        const result = await this.productionProvider.send(note, deviceToken)
+
+        if (result.failed.length) {
+            const reason = result.failed[0]?.response?.reason
+
+            if (reason === "BadEnvironmentKeyInToken") {
+            return this.sandboxProvider.send(note, deviceToken)
+            }
+        }
 
         console.log(
             "APNS RESULT",
@@ -71,6 +89,21 @@ export class ApnsService {
             notificationId,
         };
 
-        return this.provider.send(note, deviceToken);
+        const result = await this.productionProvider.send(note, deviceToken)
+
+        if (result.failed.length) {
+            const reason = result.failed[0]?.response?.reason
+
+            if (reason === "BadEnvironmentKeyInToken") {
+            return this.sandboxProvider.send(note, deviceToken)
+            }
+        }
+
+        console.log(
+            "APNS RESULT",
+            JSON.stringify(result, null, 2)
+        );
+
+        return result;
     }
 }
