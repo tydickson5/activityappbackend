@@ -26,56 +26,39 @@ export class ApnsService {
         })
     }
 
-    async sendNotification(
-        deviceToken: string,
-        payload: {
-            notificationId: string;
-            title?: string;
-            body?: string;
-            type: string;
-            version?: number;
-        },
-    ) {
-        const note = new apn.Notification();
+    async sendNotification(deviceToken: string, payload: any) {
 
-        note.topic = process.env.APPLE_BUNDLE_ID!;
+        const note = new apn.Notification()
+        note.topic = process.env.APPLE_BUNDLE_ID!
 
-        if (payload.title || payload.body) {
-            note.alert = {
-                title: payload.title ?? '',
-                body: payload.body ?? '',
-            };
+        note.alert = {
+            title: payload.title ?? '',
+            body: payload.body ?? '',
         }
 
-        note.sound = 'default';
+        note.sound = 'default'
+        note.payload = payload
 
-        //collapseable
+        console.log("Sending via PRODUCTION")
 
-        note.collapseId = payload.notificationId;
+        let result = await this.productionProvider.send(note, deviceToken)
 
-        note.payload = {
-            notificationId: payload.notificationId,
-            type: payload.type,
-            version: payload.version || 1,
+        console.log("PRODUCTION RESULT:", JSON.stringify(result, null, 2))
+
+        if (result.failed?.length) {
+            console.log("Retrying via SANDBOX")
+
+            const sandboxResult = await this.sandboxProvider.send(note, deviceToken)
+
+            console.log("SANDBOX RESULT:", JSON.stringify(sandboxResult, null, 2))
+
+            return sandboxResult
         }
 
-        const result = await this.productionProvider.send(note, deviceToken)
-
-        if (result.failed.length) {
-            const reason = result.failed[0]?.response?.reason
-
-            if (reason === "BadEnvironmentKeyInToken") {
-            return this.sandboxProvider.send(note, deviceToken)
-            }
-        }
-
-        console.log(
-            "APNS RESULT",
-            JSON.stringify(result, null, 2)
-        );
-
-        return result;
+        return result
     }
+
+    
 
     async sendSilentDelete(deviceToken: string, notificationId: string){
         const note = new apn.Notification()
