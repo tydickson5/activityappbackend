@@ -20,10 +20,13 @@ export class DeviceTokenController {
 
         const result = await this.supabase.client
         .from('device_tokens')
-        .upsert({
-            user_id: body.userId,
-            device_token: body.deviceToken,
-        });
+        .upsert(
+            {
+                user_id: body.userId,
+                device_token: body.deviceToken,
+            },
+            { onConflict: 'user_id' }
+        );
 
         console.log(result);
 
