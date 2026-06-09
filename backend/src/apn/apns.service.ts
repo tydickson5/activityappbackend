@@ -49,7 +49,14 @@ export class ApnsService {
             version: payload.version || 1,
         }
 
-        return this.provider.send(note, devideToken)
+        const result = await this.provider.send(note, devideToken);
+
+        console.log(
+            "APNS RESULT",
+            JSON.stringify(result, null, 2)
+        );
+
+        return result;
     }
 
     async sendSilentDelete(deviceToken: string, notificationId: string){
