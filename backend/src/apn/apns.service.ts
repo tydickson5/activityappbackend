@@ -39,6 +39,14 @@ export class ApnsService {
         note.sound = 'default'
         note.payload = payload
 
+        console.log("BUNDLE:", process.env.APPLE_BUNDLE_ID)
+        console.log("TEAM:", process.env.APPLE_TEAM_ID)
+        console.log("KEY:", process.env.APPLE_KEY_ID)
+        console.log(
+        "P8 exists:",
+        !!process.env.APPLE_APNS_KEY || !!process.env.APPLE_APNS_KEY_PATH
+        )
+
         console.log("Sending via PRODUCTION")
 
         console.log("Trying SANDBOX first")
@@ -49,6 +57,7 @@ export class ApnsService {
             console.log("SUCCESS via SANDBOX — token is a development token")
             return sandboxResult
         }
+
 
         console.log("Trying PRODUCTION")
         const productionResult = await this.productionProvider.send(note, deviceToken)
