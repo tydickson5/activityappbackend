@@ -4,7 +4,7 @@ import apn from '@parse/node-apn'
 @Injectable()
 export class ApnsService {
     private productionProvider: apn.Provider
-
+    private sandboxProvider: apn.Provider
     constructor() {
 
 
@@ -15,6 +15,14 @@ export class ApnsService {
                 teamId: process.env.APPLE_TEAM_ID!,
             },
             production: true, 
+        })
+        this.sandboxProvider = new apn.Provider({
+            token: {
+                key: process.env.APPLE_APNS_KEY || process.env.APPLE_APNS_KEY_PATH!!,
+                keyId: process.env.APPLE_KEY_ID!,
+                teamId: process.env.APPLE_TEAM_ID!,
+            },
+            production: false, 
         })
     }
 
@@ -33,15 +41,19 @@ export class ApnsService {
 
         console.log("Sending via PRODUCTION")
 
-        const result = await this.productionProvider.send(note, deviceToken);
+        console.log("Trying SANDBOX first")
+        const sandboxResult = await this.sandboxProvider.send(note, deviceToken)
+        console.log("SANDBOX RESULT:", JSON.stringify(sandboxResult, null, 2))
 
-        console.log("APNS RESULT:", JSON.stringify(result, null, 2));
-
-        if (result.failed.length) {
-            console.error("APNS FAILED:", result.failed);
+        if (sandboxResult.sent?.length) {
+            console.log("SUCCESS via SANDBOX — token is a development token")
+            return sandboxResult
         }
 
-        return result
+        console.log("Trying PRODUCTION")
+        const productionResult = await this.productionProvider.send(note, deviceToken)
+        console.log("PRODUCTION RESULT:", JSON.stringify(productionResult, null, 2))
+        return productionResult
     }
 
     
