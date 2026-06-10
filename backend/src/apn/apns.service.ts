@@ -10,7 +10,7 @@ export class ApnsService {
 
         this.productionProvider = new apn.Provider({
             token: {
-                key: process.env.APPLE_APNS_KEY_PATH!,
+                key: process.env.APPLE_APNS_KEY || process.env.APPLE_APNS_KEY_PATH!!,
                 keyId: process.env.APPLE_KEY_ID!,
                 teamId: process.env.APPLE_TEAM_ID!,
             },
