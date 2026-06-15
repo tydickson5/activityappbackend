@@ -9,7 +9,7 @@ export class PostService{
         private readonly notificationService: NotificationService
     ) {}
 
-    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, latitude, longitude){
+    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude){
 
         console.log("post creating")
         const{data, error} = await this.supabase.client
@@ -31,8 +31,14 @@ export class PostService{
             throw error
         }
 
+        if(mediaType == "video"){
+            console.log("uploading vid")
+            await this.createUpload(userId, postId, videoURL,mediaType)
+        }
+        
 
-        await this.sendNotificaitonToUsers(groupId, userId,latitude,longitude)
+
+        await this.sendNotificaitonToUsers(groupId, userId,latitude,longitude, postId)
         console.log("post notified")
 
         return data
@@ -75,7 +81,7 @@ export class PostService{
         return null;
     }
 
-    async sendNotificaitonToUsers(groupId: string, userId: string, latitude, longitude){
+    async sendNotificaitonToUsers(groupId: string, userId: string, latitude, longitude, postId: string){
         console.log("test")
         const {data, error} = await this.supabase.client
             .from('group_memberships')
@@ -96,10 +102,7 @@ export class PostService{
 
         for(let member of data){
             if(member.user_id != userId){
-
-                
-
-                await this.notificationService.createNotification(member.user_id,title, text)
+                await this.notificationService.createNotification(member.user_id,title, text, postId)
             }
         }
     }

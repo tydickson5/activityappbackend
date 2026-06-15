@@ -11,7 +11,7 @@ export class NotificationService {
         ) {}
 
 
-    async createNotification(userId: string, title: string, body: string) {
+    async createNotification(userId: string, title: string, body: string, postId: string) {
         console.log("STEP 1: entered function", userId)
 
         const { data: notification, error } = await this.supabase.client
@@ -20,6 +20,7 @@ export class NotificationService {
                 user_id: userId,
                 title,
                 body,
+                post_id: postId,
             })
             .select()
             .single()
@@ -51,6 +52,7 @@ export class NotificationService {
                     body,
                     type: 'notification_created',
                     version: 1,
+                    postId: postId
                 }
             )
         }
@@ -60,7 +62,7 @@ export class NotificationService {
         return notification
     }
 
-    async updateNotification(notificationId: string, title: string, body: string){
+    async updateNotification(notificationId: string, title: string, body: string, postId: string){
         const {data: existing} = await this.supabase.client
             .from('notifications')
             .select('*')
@@ -94,6 +96,7 @@ export class NotificationService {
                     body,
                     type: 'notification_updated',
                     version,
+                    postId,
                 }
             )
         }
