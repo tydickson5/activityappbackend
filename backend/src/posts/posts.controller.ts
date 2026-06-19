@@ -20,9 +20,10 @@ export class PostController {
             videoUrl: string,
             latitude,
             longitude,
+            isPublic: boolean
         }
     ){
-        return this.postsService.createPost(body.postId,body.userId, body.groupId,body.caption,body.mediaUrl,body.mediaType,body.videoUrl,body.latitude,body.longitude)
+        return this.postsService.createPost(body.postId,body.userId, body.groupId,body.caption,body.mediaUrl,body.mediaType,body.videoUrl,body.latitude,body.longitude, body.isPublic)
     }
 
     @Post('delete')

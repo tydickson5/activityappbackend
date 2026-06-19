@@ -9,7 +9,7 @@ export class PostService{
         private readonly notificationService: NotificationService
     ) {}
 
-    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude){
+    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude, isPublic: boolean){
 
         console.log("post creating")
         const{data, error} = await this.supabase.client
@@ -34,6 +34,27 @@ export class PostService{
         if(mediaType == "video"){
             console.log("uploading vid")
             await this.createUpload(userId, postId, videoURL,mediaType)
+        }
+
+        if(isPublic){
+            //add public post
+            const{data, error} = await this.supabase.client
+                .from('posts')
+                .insert({
+                    user_id: userId,
+                    group_id: "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265",
+                    caption: caption,
+                    media_url: mediaUrl,
+                    media_type: mediaType,
+                    latitude: latitude,
+                    longitude: longitude,
+                })
+                .select()
+                .single()
+
+            if(error){
+                throw error
+            }
         }
         
 
