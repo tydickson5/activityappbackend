@@ -113,12 +113,23 @@ export class PostService{
             throw error
         }
 
+        
+
         const {data: m, error: e} = await this.supabase.client.from('profiles')
             .select('*')
             .eq('id', userId)
             .single()
 
-        var title = m.username + " posted"
+        const {data: groupData, error: groupError} = await this.supabase.client
+            .from("groups")
+            .select("*")
+            .eq('id', groupId)
+            .single()
+        if(groupError){
+            throw groupError
+        }
+
+        var title = m.username + " posted in " + groupData.name
         var text = "@ " + longitude + ", " + latitude
 
         for(let member of data){
