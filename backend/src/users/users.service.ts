@@ -51,9 +51,14 @@ export class UserService{
         }
 
         //join main group
-        var response = this.joinPublicGroup(userId, "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265")
-
-        console.log(response)
+        try {
+            await this.joinPublicGroup(
+                userId,
+                "6ce9c8f8-2ff2-4f12-8f74-19671fcfb265"
+            )
+        } catch (error) {
+            console.error(error)
+        }
 
         return data
     }
