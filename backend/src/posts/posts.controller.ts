@@ -30,9 +30,11 @@ export class PostController {
     async join(
         @Body()
         body: {
-            post_id: string
+            post_id: string,
+            post_type: string,
+            bucket_path: string
         }
     ){
-        return this.postsService.deletePost(body.post_id)
+        return this.postsService.deletePost(body.post_id, body.post_type, body.bucket_path)
     }
 }

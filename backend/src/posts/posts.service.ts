@@ -65,7 +65,23 @@ export class PostService{
         return data
     }
 
-    async deletePost(postId: string){
+    async deletePost(postId: string, postType: string, bucketPath: string){
+
+        if(postType == "image"){
+            this.deleteUploadFromStorage(bucketPath)
+
+            
+        } else {
+            const {data: upload, error: uploadError} = await this.supabase.client.from("uploads")
+            .select("*").eq("post_id", postId).single()
+
+            if(uploadError){
+                throw uploadError
+            }
+
+            this.deleteUploadFromStorage(upload.file_url)
+        }
+
 
         const {error} = await this.supabase.client
             .from('posts')
@@ -98,8 +114,13 @@ export class PostService{
 
     }
 
-    async deleteUploadFromStorage(postId: string, uploadId: string){
-        return null;
+
+    async deleteUploadFromStorage(bucketPath: string){
+        const {data, error} = await this.supabase.client.storage.from('postImages').remove([bucketPath])
+
+        if(error){
+            throw error
+        }
     }
 
     async sendNotificaitonToUsers(groupId: string, userId: string, latitude, longitude, postId: string){
