@@ -3,6 +3,7 @@ import { PostController } from "./posts.controller";
 import { PostService } from "./posts.service";
 import { SupabaseModule } from "src/supabaseModule";
 import { NotificationsModule } from "src/apn/notifications.module";
+import { CommentService } from "./comments/comments.service";
 
 @Module({
     imports: [SupabaseModule, NotificationsModule],
@@ -10,7 +11,8 @@ import { NotificationsModule } from "src/apn/notifications.module";
         PostController
     ],
     providers: [
-        PostService
+        PostService,
+        
     ]
 })
 

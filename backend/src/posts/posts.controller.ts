@@ -5,7 +5,9 @@ import { JWTStrategy } from "src/auth/jwt.strategy";
 @Controller('posts')
 @UseGuards(JWTStrategy)
 export class PostController {
-    constructor(private postsService: PostService){}
+    constructor(
+        private postsService: PostService,
+    ){}
 
     @Post('create')
     async create(
@@ -37,4 +39,6 @@ export class PostController {
     ){
         return this.postsService.deletePost(body.post_id, body.post_type, body.bucket_path)
     }
+
+    
 }

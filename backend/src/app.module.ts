@@ -10,6 +10,8 @@ import { GroupModule } from './groups/groups.module';
 import { PostModule } from './posts/posts.module';
 import { SupabaseService } from './supabaseService';
 import { SupabaseModule } from './supabaseModule';
+import { CommentModule } from './posts/comments/comments.module';
+import { LikeModule } from './posts/likes/likes.module';
 
 
 @Module({
@@ -20,7 +22,9 @@ import { SupabaseModule } from './supabaseModule';
         UserModule,
         NotificationsModule,
         GroupModule,
-        PostModule
+        PostModule,
+        CommentModule,
+        LikeModule
     ],
     controllers: [AppController,DeviceTokenController],
     providers: [AppService, SupabaseService],
