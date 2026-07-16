@@ -29,8 +29,13 @@ export class LikeService{
 
         //update like count
         const {data: updatePost, error: updatePostError} = await this.supabase.client
-            .from("posts").update(["post_likes", likes]).eq("id", postId)
+            .from("posts")
+            .update({ post_likes: likes })
+            .eq("id", postId)
 
+        if (updatePostError) {
+            throw updatePostError
+        }
         //notify
         await this.sendNotificationForLike(postId, userId)
 
@@ -47,7 +52,13 @@ export class LikeService{
 
         //update like count
         const {data: updatePost, error: updatePostError} = await this.supabase.client
-            .from("posts").update(["post_likes", likes]).eq("id", postId)
+            .from("posts")
+            .update({ post_likes: likes })
+            .eq("id", postId)
+
+        if (updatePostError) {
+            throw updatePostError
+        }
     }
 
     async sendNotificationForLike(postId: string, userId: string){
