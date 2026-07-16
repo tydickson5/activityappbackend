@@ -26,10 +26,10 @@ export class LikeController {
         @Body()
         body: {
             postId: string,
-            likeId: string,
+            userId: string,
             postLikes
         }
     ){
-        return this.likeService.removeLike(body.postId, body.likeId, body.postLikes)
+        return this.likeService.removeLike(body.postId, body.userId, body.postLikes)
     }
 }

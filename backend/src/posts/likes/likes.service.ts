@@ -42,13 +42,17 @@ export class LikeService{
             
     }
 
-    async removeLike(postId: string, likeId: string, likes){
+    async removeLike(postId: string, userId: string, likes){
 
+        console.log(postId)
+        console.log(userId)
         //remove like
         const {error} = await this.supabase.client
             .from("post_likes")
             .delete()
-            .eq("id", likeId)
+            .eq("user_id", userId)
+            .eq("post_id", postId)
+        if(error){throw error}
 
         //update like count
         const {data: updatePost, error: updatePostError} = await this.supabase.client
