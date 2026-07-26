@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { freemem } from "os";
 import { NotificationService } from "src/apn/notification.service";
 import { SupabaseService } from "src/supabaseService";
 
@@ -31,7 +32,16 @@ export class FriendsService{
     }
 
     async deleteFriendRequest(friendRequestId: string){
+        const {error} = await this.supabase.client
+            .from("friend_request")
+            .delete()
+            .eq("id", friendRequestId)
 
+        if(error){
+            throw error
+        }
+
+        return true
     }
 
     async acceptFriendRequest(){

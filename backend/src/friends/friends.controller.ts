@@ -20,4 +20,14 @@ export class FriendController {
     ){
         return this.friendService.sendFriendRequest(body.userId,body.friendId,body.friendUsername)
     }
+
+    @Post("deleteRequest")
+    async deleteRequest(
+        @Body()
+        body: {
+            friendRequestId: string
+        }
+    ){
+        return this.friendService.deleteFriendRequest(body.friendRequestId)
+    }
 }
