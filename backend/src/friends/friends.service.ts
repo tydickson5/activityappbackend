@@ -44,13 +44,86 @@ export class FriendsService{
         return true
     }
 
-    async acceptFriendRequest(){
-        //if no friend the make no one
+    async acceptFriendRequest(friendRequestId: string, userId: string, friendId: string){
+        
+        const {data: friendExistsData, error: friendExistsError} = await this.supabase.client
+            .from("friends")
+            .select("*")
+            .eq("user_id", userId)
+            .eq("friend_id", friendId)
+
+        if(friendExistsError){
+            throw friendExistsError
+        }
+
+        var data = null;
+
+        if(friendExistsData.length > 0){
+            //friend exists --> mark active for both directions
+            const{ data: updateUserToFriendData, error: updateUserToFriendError} = await this.supabase.client
+                .from("friends")
+                .update({"active": true})
+                .eq("user_id", userId)
+                .eq("friend_id", friendId)
+                .select()
+                .single()
+
+            if(updateUserToFriendError){
+                throw updateUserToFriendError
+            }
+
+            const{ error: updateFriendToUserError} = await this.supabase.client
+                .from("friends")
+                .update({"active": true})
+                .eq("user_id", friendId)
+                .eq("friend_id", userId)
+
+            if(updateFriendToUserError){
+                throw updateFriendToUserError
+            }
+
+            data = updateUserToFriendData
+            
+
+        } else {
+
+            //friend does not exist --> create for both directions
+            const { data: createUserToFriendData, error: createUserToFriendError } = await this.supabase.client
+                .from("friends")
+                .insert({
+                    user_id: userId,
+                    friend_id: friendId,
+
+                })
+                .select()
+                .single()
+
+            if(createUserToFriendError){
+                throw createUserToFriendError
+            }
+
+            const { data: createFriendToUserData, error: createFriendToUserError} = await this.supabase.client
+                .from("friends")
+                .insert({
+                    user_id: friendId,
+                    friend_id: userId,
+
+                })
 
 
+            if(createFriendToUserError){
+                throw createFriendToUserError
+            }
 
-        //else mark active
+            data = createUserToFriendData
+        }
 
+        //delete friend request
+        this.deleteFriendRequest(friendRequestId)
+
+        //notifications
+
+        return data
     }
 
     async denyFriendRequest(){
