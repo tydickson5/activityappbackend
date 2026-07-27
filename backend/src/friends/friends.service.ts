@@ -44,7 +44,7 @@ export class FriendsService{
         return true
     }
 
-    async acceptFriendRequest(friendRequestId: string, userId: string, friendId: string){
+    async acceptFriendRequest(friendRequestId: string, userId: string, friendId: string, friendUsername: string){
         
         const {data: friendExistsData, error: friendExistsError} = await this.supabase.client
             .from("friends")
@@ -126,11 +126,37 @@ export class FriendsService{
         return data
     }
 
-    async denyFriendRequest(){
+    async denyFriendRequest(friendRequestId){
+
+        this.deleteFriendRequest(friendRequestId)
+
 
     }
 
-    async deleteFriend(){
+    async deleteFriend(userId: string, friendId: string){
         //mark as inactive friend
+        const{ data: updateUserToFriendData, error: updateUserToFriendError} = await this.supabase.client
+            .from("friends")
+            .update({"active": true})
+            .eq("user_id", userId)
+            .eq("friend_id", friendId)
+            .select()
+            .single()
+
+        if(updateUserToFriendError){
+            throw updateUserToFriendError
+        }
+
+        const{ error: updateFriendToUserError} = await this.supabase.client
+            .from("friends")
+            .update({"active": true})
+            .eq("user_id", friendId)
+            .eq("friend_id", userId)
+
+        if(updateFriendToUserError){
+            throw updateFriendToUserError
+        }
+
+       return updateUserToFriendData
     }
 }
