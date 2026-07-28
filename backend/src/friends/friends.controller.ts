@@ -30,4 +30,6 @@ export class FriendController {
     ){
         return this.friendService.deleteFriendRequest(body.friendRequestId)
     }
+
+    
 }

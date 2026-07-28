@@ -13,9 +13,10 @@ export class NotificationController {
             title: string,
             body: string,
             postId: string,
+            idType: string,
         },
     ) {
-        return this.notificationsService.createNotification(body.userId,body.title,body.body, body.postId)
+        return this.notificationsService.createNotification(body.userId,body.title,body.body, body.postId, body.idType)
     }
 
     @Patch(':id')
@@ -26,9 +27,10 @@ export class NotificationController {
             title: string;
             body: string;
             postId: string;
+            idType: string;
         },
     ){
-        return this.notificationsService.updateNotification(id, body.title, body.body, body.postId)
+        return this.notificationsService.updateNotification(id, body.title, body.body, body.postId, body.idType)
     }
 
     @Delete(':id')

@@ -26,9 +26,20 @@ export class FriendsService{
         }
 
         //notification to create/update notification
+
+
+
         return requestData
 
 
+    }
+
+    async sendFriendRequestNotification(friendRequestId: string, friendUserId: string, friendUsername: string){
+
+        var title = friendUsername + " sent you a friend request"
+        var body = ""
+
+        this.notificationService.createNotification(friendUserId, title, body, friendRequestId, "friend request")
     }
 
     async deleteFriendRequest(friendRequestId: string){

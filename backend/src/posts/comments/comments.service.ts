@@ -74,7 +74,7 @@ export class CommentService{
         var text = comment
 
         if(postUserData.commentNotification){
-            await this.notificationService.createNotification(postUserData.id, title, text, postData.id)
+            await this.notificationService.createNotification(postUserData.id, title, text, postData.id, "post")
         }
 
     }

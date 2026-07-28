@@ -155,7 +155,7 @@ export class PostService{
 
         for(let member of data){
             if(member.user_id != userId){
-                await this.notificationService.createNotification(member.user_id,title, text, postId)
+                await this.notificationService.createNotification(member.user_id,title, text, postId, "post")
             }
         }
     }

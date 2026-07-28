@@ -105,7 +105,7 @@ export class LikeService{
         var text = ""
 
         if(postUserData.likeNotification){
-            await this.notificationService.createNotification(postUserData, title, text, postData.id)
+            await this.notificationService.createNotification(postUserData, title, text, postData.id, "post")
         }
 
     }
