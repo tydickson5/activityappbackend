@@ -31,5 +31,28 @@ export class FriendController {
         return this.friendService.deleteFriendRequest(body.friendRequestId)
     }
 
-    
+    @Post("acceptRequest")
+    async acceptRequest(
+        @Body()
+        body: {
+            friendRequestId: string,
+            userId: string,
+            friendId: string,
+            friendUsername: string,
+        }
+    ){
+        return this.friendService.acceptFriendRequest(body.friendRequestId, body.userId,body.friendId,body.friendUsername)
+    }
+
+    @Post("deleteFriend")
+    async deleteFriend(
+        @Body()
+        body:{
+            userId: string,
+            friendId: string
+        }
+    ){
+        return this.friendService.deleteFriend(body.userId,body.friendId)
+    }
+
 }
