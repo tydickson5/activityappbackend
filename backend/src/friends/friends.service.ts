@@ -26,7 +26,7 @@ export class FriendsService{
         }
 
         //notification to create/update notification
-
+        this.sendFriendRequestNotification(requestData.id, friendUserId, friendUserName)
 
 
         return requestData
@@ -37,7 +37,7 @@ export class FriendsService{
     async sendFriendRequestNotification(friendRequestId: string, friendUserId: string, friendUsername: string){
 
         var title = friendUsername + " sent you a friend request"
-        var body = ""
+        var body = "Click to accept"
 
         this.notificationService.createNotification(friendUserId, title, body, friendRequestId, "friend request")
     }
@@ -93,6 +93,7 @@ export class FriendsService{
                 throw updateFriendToUserError
             }
 
+            this.sendAcceptFriendRequestNotification(updateUserToFriendData.id, friendId, friendUsername)
             data = updateUserToFriendData
             
 
@@ -127,14 +128,25 @@ export class FriendsService{
             }
 
             data = createUserToFriendData
+
+            this.sendAcceptFriendRequestNotification(createUserToFriendData.id, friendId, friendUsername)
         }
 
         //delete friend request
         this.deleteFriendRequest(friendRequestId)
 
         //notifications
+        
+        
 
         return data
+    }
+
+    async sendAcceptFriendRequestNotification(friendId: string, friendUserId: string, friendUsername: string){
+        var title = friendUsername + " accepted your friend reqeust"
+        var body = ""
+
+        await this.notificationService.createNotification(friendUserId, title, body, friendId, "friend")
     }
 
     async denyFriendRequest(friendRequestId){
