@@ -1,0 +1,24 @@
+Trips
+
+Trip
+-id
+-user foriegn key on delete cascade
+-name
+-active set true
+-created_at
+-ended_at
+
+start trip -> create Trip
+end trip -> end trip(set end at time) -> send notification
+add posts -> for all active trips create TripItem through add trip
+add trip -> create trip item for a post
+remove trip -> delete trip item for a post
+delete trip -> delete trip and all trip items
+
+TripItem
+-id
+-trip id foriegn key on delete cascade
+-user id foriegn key on delete cascade
+-created_at
+-post id foriegn key on delete cascade
+
