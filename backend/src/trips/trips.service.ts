@@ -58,14 +58,29 @@ export class tripsService{
 
     }
 
-    async post(){
+    async post(userId: string, postId: string){
         //call addTripToPost for all active trips to post
+
 
     }
 
-    async addTripToPost(){
+    async addTripToPost(userId: string, postId: string, tripId: string){
 
+        const {data, error} = await this.supabase.client
+            .from("trip_items")
+            .insert({
+                "user_id": userId,
+                "post_id": postId,
+                "trip_id": tripId
+            })
+            .select()
+            .single()
 
+        if(error){
+            throw error
+        }
+
+        return data
     }
 
     async removeTripFromPost(){
