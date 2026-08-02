@@ -27,13 +27,34 @@ export class tripsService{
         var title = username + " just started a trip!"
         var body = ""
 
-        await this.notificationService.createNotification(userId, title, body, data.id, "trip")
+        this.tripStartedNotification(userId, username)
 
         return data
     }
 
-    async endTrip(){
+    async tripStartedNotification(userId: string, username: string){
+
+    }
+
+    async endTrip(tripId: string, ){
         //update ended_at to timestamp and active -> false + notification
+        const { data, error } = await this.supabase.client
+            .from("trips")
+            .update({
+                ended_at: Date,
+                active: false
+            })
+            .eq("id", tripId)
+
+        if(error){
+            throw error
+        }
+
+        await this.tripEndNotification()
+
+    }
+
+    async tripEndNotification(){
 
     }
 
