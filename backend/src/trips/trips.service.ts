@@ -64,7 +64,7 @@ export class tripsService{
 
     }
 
-    async addTripToPost(userId: string, postId: string, tripId: string){
+    async addPostToTrip(userId: string, postId: string, tripId: string){
 
         const {data, error} = await this.supabase.client
             .from("trip_items")
@@ -83,8 +83,16 @@ export class tripsService{
         return data
     }
 
-    async removeTripFromPost(){
+    async removePostFromTrip(tripItemId: string){
+        
+        const {error} = await this.supabase.client
+            .from("trip_items")
+            .delete()
+            .eq("id", tripItemId)
 
+        if(error){
+            throw error
+        }
     }
 
     async deleteTrip(){
