@@ -11,7 +11,7 @@ export class CommentService{
 
     
 
-    async addComment(userId: string, postId: string, comment: string){
+    async addComment(userId: string, postId: string, comment: string, threadId: string){
 
         //add comment
         const {data, error} = await this.supabase.client
@@ -19,7 +19,8 @@ export class CommentService{
             .insert({
                 user_id: userId,
                 post_id: postId,
-                comment: comment
+                comment: comment,
+                thread_id: threadId
             })
             .select()
             .single()

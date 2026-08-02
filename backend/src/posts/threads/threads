@@ -1,0 +1,26 @@
+Expand post radius by like 25%
+
+Post -> add thread id: string foreign key and head: bool
+
+if post is new location -> 
+- post.head = true
+- create new thread item
+
+
+
+if post is under location ->
+- post.head = false
+- set thread id = head post thread id
+
+Comment -> add thread id where post id is
+
+
+thread
+- id
+- created_at
+
+
+PostDetailView
+- get thread id
+- get all comments and posts under thread
+- combine them to show cleanly

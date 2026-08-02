@@ -9,7 +9,16 @@ export class PostService{
         private readonly notificationService: NotificationService
     ) {}
 
-    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude, isPublic: boolean){
+    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude, isPublic: boolean, isHead: boolean){
+
+        var threadId;
+
+        if(isHead){
+            threadId = this.createThread()
+        } else {
+            //calculate closest post
+            threadId = "none"
+        }
 
         console.log("post creating")
         const{data, error} = await this.supabase.client
@@ -22,7 +31,9 @@ export class PostService{
                 media_url: mediaUrl,
                 media_type: mediaType,
                 latitude: latitude,
-                longitude: longitude
+                longitude: longitude,
+                thread_id: threadId,
+                head: isHead
             })
             .select()
             .single()
@@ -36,6 +47,8 @@ export class PostService{
             await this.createUpload(userId, postId, videoURL,mediaType)
         }
 
+        
+
         if(isPublic){
             //add public post
             const{data, error} = await this.supabase.client
@@ -48,6 +61,7 @@ export class PostService{
                     media_type: mediaType,
                     latitude: latitude,
                     longitude: longitude,
+                    
                 })
                 .select()
                 .single()
@@ -158,5 +172,21 @@ export class PostService{
                 await this.notificationService.createNotification(member.user_id,title, text, postId, "post")
             }
         }
+    }
+
+    async createThread(){
+        const {data,error} = await this.supabase.client
+            .from("threads")
+            .insert({
+
+            })
+            .select()
+            .single()
+
+        if(error){
+            throw error
+        }
+
+        return data.id
     }
 }

@@ -48,10 +48,12 @@ export class FriendsService{
             .delete()
             .eq("id", friendRequestId)
 
+
         if(error){
             throw error
         }
 
+        
         return true
     }
 

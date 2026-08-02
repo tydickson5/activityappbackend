@@ -15,9 +15,10 @@ export class CommentController {
         body: {
             user_id: string,
             post_id: string,
-            comment: string
+            comment: string,
+            thread_id: string
         }
     ){
-        return this.commentServce.addComment(body.user_id, body.post_id, body.comment)
+        return this.commentServce.addComment(body.user_id, body.post_id, body.comment, body.thread_id)
     }
 }
