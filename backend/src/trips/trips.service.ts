@@ -95,8 +95,16 @@ export class tripsService{
         }
     }
 
-    async deleteTrip(){
+    async deleteTrip(tripId: string){
         //delete trip -> will delete all tripitems
+        const {error} = await this.supabase.client
+            .from("trips")
+            .delete()
+            .eq("id", tripId)
+
+        if(error){
+            throw error
+        }
 
     }
 }
