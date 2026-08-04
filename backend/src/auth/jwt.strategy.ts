@@ -3,13 +3,15 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 
+const DEV = true
+
 @Injectable()
 export class JWTStrategy extends PassportStrategy(Strategy){
     constructor(){
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKeyProvider: passportJwtSecret({
-                jwksUri: `${process.env.SUPABASE_URL}/auth/v1/.well-known/jwks.json`,
+                jwksUri: `${DEV ? process.env.SUPABASE_URL_DEV : process.env.SUPABASE_URL}/auth/v1/.well-known/jwks.json`,
                 cache: true,
                 rateLimit: true,
             }),

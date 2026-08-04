@@ -53,7 +53,7 @@ export class FriendsService{
             throw error
         }
 
-        
+
         return true
     }
 
@@ -162,7 +162,7 @@ export class FriendsService{
         //mark as inactive friend
         const{ data: updateUserToFriendData, error: updateUserToFriendError} = await this.supabase.client
             .from("friends")
-            .update({"active": true})
+            .update({"active": false})
             .eq("user_id", userId)
             .eq("friend_id", friendId)
             .select()
@@ -174,7 +174,7 @@ export class FriendsService{
 
         const{ error: updateFriendToUserError} = await this.supabase.client
             .from("friends")
-            .update({"active": true})
+            .update({"active": false})
             .eq("user_id", friendId)
             .eq("friend_id", userId)
 
