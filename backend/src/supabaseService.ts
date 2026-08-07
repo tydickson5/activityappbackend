@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import ws from 'ws';
 
-const DEV = true;  // flip this to switch environments
+const DEV = false;  // flip this to switch environments
 
 const CONFIGS = {
     staging: {
