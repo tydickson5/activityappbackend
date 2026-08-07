@@ -13,8 +13,11 @@ export class PostService{
 
         var threadId;
 
+        isHead = false
+
         if(isHead){
             threadId = this.createThread()
+            threadId = threadId.id
         } else {
             //calculate closest post
             threadId = "none"
@@ -164,6 +167,6 @@ export class PostService{
             throw error
         }
 
-        return data.id
+        return data
     }
 }
