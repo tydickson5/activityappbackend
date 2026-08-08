@@ -53,7 +53,7 @@ export class PostService{
         
 
 
-        await this.sendNotificaitonToUsers(groupId, userId,latitude,longitude, postId)
+        //await this.sendNotificaitonToUsers(groupId, userId,latitude,longitude, postId)
         console.log("post notified")
 
         return data
