@@ -9,7 +9,7 @@ export class PostService{
         private readonly notificationService: NotificationService
     ) {}
 
-    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude, isHead: boolean, state: string){
+    async createPost(postId: string, userId: string, groupId: string, caption:string, mediaUrl: string, mediaType: string, videoURL: string, latitude, longitude, isHead: boolean, state: string, created_at: string){
 
         var threadId;
 
@@ -37,7 +37,8 @@ export class PostService{
                 longitude: longitude,
                 state: state,
                 thread_id: threadId,
-                head: isHead
+                head: isHead,
+                created_at: created_at
             })
             .select()
             .single()
