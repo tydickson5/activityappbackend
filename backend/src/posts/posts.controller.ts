@@ -27,7 +27,7 @@ export class PostController {
             created_at?: string
         }
     ){
-        return this.postsService.createPost(body.postId,body.userId, body.groupId,body.caption,body.mediaUrl,body.mediaType,body.videoUrl,body.latitude,body.longitude, body.isHead, body.state, body.created_at ?? null)
+        return this.postsService.createPost(body.postId,body.userId, body.groupId,body.caption,body.mediaUrl,body.mediaType,body.videoUrl,body.latitude,body.longitude, body.isHead, body.state, body.created_at)
     }
 
     @Post('delete')
